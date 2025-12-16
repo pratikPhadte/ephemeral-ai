@@ -64,17 +64,33 @@ animateElements.forEach((el, index) => {
     fadeInObserver.observe(el);
 });
 
-// ===== Contact Form - Opens Email Client =====
+// ===== Contact Form - Saves to Google Sheet & Opens Email Client =====
 const sendEmailBtn = document.getElementById('sendEmailBtn');
+const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwtuk7HnOBAnEBj10aAHFsC7neuFKDgyExzjdO-fsX3pVdpPXOioVkLu_djHY6YE7aOkg/exec';
 
 if (sendEmailBtn) {
-    sendEmailBtn.addEventListener('click', (e) => {
+    sendEmailBtn.addEventListener('click', async (e) => {
         e.preventDefault();
 
         const name = document.getElementById('name').value.trim();
         const company = document.getElementById('company').value.trim();
         const message = document.getElementById('message').value.trim();
 
+        // Save to Google Sheet (don't wait for response)
+        fetch(GOOGLE_SHEET_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: name || 'Not provided',
+                company: company || 'Not provided',
+                message: message || 'No message'
+            })
+        }).catch(() => {}); // Silently fail if sheet save fails
+
+        // Open email client
         const subject = encodeURIComponent('Ephemeral.ai - Project Inquiry');
 
         let body = '';
