@@ -83,10 +83,12 @@ if (sendEmailBtn) {
             message: message || 'No message'
         });
 
-        fetch(`${GOOGLE_SHEET_URL}?${params.toString()}`, {
-            method: 'GET',
-            mode: 'no-cors'
-        }).catch(() => {}); // Silently fail if sheet save fails
+        // Use an image beacon to ensure the request completes before redirect
+        const img = new Image();
+        img.src = `${GOOGLE_SHEET_URL}?${params.toString()}`;
+
+        // Small delay to ensure request is sent before mailto redirect
+        await new Promise(resolve => setTimeout(resolve, 500));
 
         // Open email client
         const subject = encodeURIComponent('Ephemeral.ai - Project Inquiry');
@@ -98,7 +100,7 @@ if (sendEmailBtn) {
         body += message || 'I would like to discuss a project with you.';
 
         const encodedBody = encodeURIComponent(body);
-        const mailtoLink = `mailto:pratikphadte1910@gmail.com?subject=${subject}&body=${encodedBody}`;
+        const mailtoLink = `mailto:ephemeralai5@gmail.com?subject=${subject}&body=${encodedBody}`;
 
         window.location.href = mailtoLink;
     });
