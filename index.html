@@ -6,6 +6,14 @@
     <title>Ephemeral.ai | Embedded Intelligence Solutions</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
 </head>
 <body>
     <!-- Translucent Background Artifacts -->
@@ -15,6 +23,20 @@
         <div class="artifact artifact-3"></div>
         <div class="artifact artifact-4"></div>
         <div class="artifact artifact-5"></div>
+        <div class="artifact artifact-6"></div>
+        <div class="artifact artifact-7"></div>
+        <div class="artifact artifact-8"></div>
+        <!-- Geometric shapes -->
+        <div class="geo-shape shape-1"></div>
+        <div class="geo-shape shape-2"></div>
+        <div class="geo-shape shape-3"></div>
+        <div class="geo-shape shape-4"></div>
+        <!-- Grid overlay -->
+        <div class="grid-overlay"></div>
+        <!-- Floating lines -->
+        <div class="floating-line line-1"></div>
+        <div class="floating-line line-2"></div>
+        <div class="floating-line line-3"></div>
     </div>
 
     <!-- Navigation -->
@@ -284,7 +306,7 @@
                     <div class="contact-details">
                         <div class="contact-item">
                             <span class="contact-label">Email</span>
-                            <a href="mailto:hello@ephemeral.ai">hello@ephemeral.ai</a>
+                            <span>contact@ephemeral.ai</span>
                         </div>
                         <div class="contact-item">
                             <span class="contact-label">Location</span>
@@ -292,7 +314,8 @@
                         </div>
                     </div>
                 </div>
-                <form class="contact-form" id="contactForm">
+                <!-- Formspree form - submissions go to your email without exposing it -->
+                <form class="contact-form" id="contactForm" action="https://formspree.io/f/xpwzgvkr" method="POST">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" id="name" name="name" required>
@@ -307,8 +330,9 @@
                     </div>
                     <div class="form-group">
                         <label for="message">Project Details</label>
-                        <textarea id="message" name="message" rows="4" placeholder="Tell us about your use case, target hardware, and timeline..."></textarea>
+                        <textarea id="message" name="message" rows="4" placeholder="Tell us about your use case, target hardware, and timeline..." required></textarea>
                     </div>
+                    <input type="hidden" name="_subject" value="New Ephemeral.ai Contact Form Submission">
                     <button type="submit" class="btn btn-primary btn-full">Send Message</button>
                 </form>
             </div>

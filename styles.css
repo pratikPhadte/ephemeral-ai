@@ -118,6 +118,144 @@ img {
     animation: float 30s ease-in-out infinite;
 }
 
+.artifact-6 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(200, 200, 200, 0.2) 0%, transparent 70%);
+    top: 70%;
+    right: 30%;
+    animation: float 24s ease-in-out infinite reverse;
+}
+
+.artifact-7 {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(45deg, rgba(180, 180, 180, 0.15), transparent);
+    top: 5%;
+    left: 20%;
+    animation: float 28s ease-in-out infinite;
+}
+
+.artifact-8 {
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(ellipse, rgba(190, 190, 190, 0.12) 0%, transparent 60%);
+    bottom: 30%;
+    left: 60%;
+    animation: float 35s ease-in-out infinite reverse;
+}
+
+/* Geometric Shapes */
+.geo-shape {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.08;
+}
+
+.shape-1 {
+    width: 120px;
+    height: 120px;
+    border: 1px solid var(--black);
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    top: 15%;
+    right: 15%;
+    animation: morph 15s ease-in-out infinite, rotate 25s linear infinite;
+}
+
+.shape-2 {
+    width: 80px;
+    height: 80px;
+    border: 1px solid var(--black);
+    top: 45%;
+    left: 10%;
+    animation: rotate 20s linear infinite reverse;
+}
+
+.shape-3 {
+    width: 60px;
+    height: 60px;
+    border: 1px solid var(--black);
+    border-radius: 50%;
+    bottom: 25%;
+    right: 20%;
+    animation: pulse-shape 4s ease-in-out infinite;
+}
+
+.shape-4 {
+    width: 100px;
+    height: 100px;
+    border: 1px solid var(--black);
+    border-radius: 50% 0 50% 0;
+    top: 75%;
+    left: 25%;
+    animation: rotate 30s linear infinite;
+}
+
+@keyframes morph {
+    0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+    25% { border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%; }
+    50% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; }
+    75% { border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%; }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-shape {
+    0%, 100% { transform: scale(1); opacity: 0.08; }
+    50% { transform: scale(1.2); opacity: 0.15; }
+}
+
+/* Grid Overlay */
+.grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.5;
+}
+
+/* Floating Lines */
+.floating-line {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.08), transparent);
+    pointer-events: none;
+}
+
+.line-1 {
+    width: 300px;
+    top: 30%;
+    left: 5%;
+    animation: float-line 12s ease-in-out infinite;
+}
+
+.line-2 {
+    width: 200px;
+    top: 60%;
+    right: 10%;
+    animation: float-line 15s ease-in-out infinite reverse;
+}
+
+.line-3 {
+    width: 250px;
+    bottom: 20%;
+    left: 40%;
+    animation: float-line 18s ease-in-out infinite;
+}
+
+@keyframes float-line {
+    0%, 100% { transform: translateX(0) rotate(0deg); opacity: 0.3; }
+    50% { transform: translateX(50px) rotate(5deg); opacity: 0.6; }
+}
+
 @keyframes float {
     0%, 100% { transform: translate(0, 0) scale(1); }
     25% { transform: translate(30px, -30px) scale(1.05); }

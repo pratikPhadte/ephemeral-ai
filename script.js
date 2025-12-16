@@ -64,7 +64,7 @@ animateElements.forEach((el, index) => {
     fadeInObserver.observe(el);
 });
 
-// ===== Form Handling =====
+// ===== Form Handling with Formspree =====
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
@@ -78,15 +78,28 @@ if (contactForm) {
         submitBtn.textContent = 'Sending...';
         submitBtn.disabled = true;
 
-        // Simulate form submission (replace with actual API call)
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        try {
+            const formData = new FormData(contactForm);
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
 
-        // Show success state
-        submitBtn.textContent = 'Message Sent!';
-        submitBtn.style.background = '#22c55e';
-
-        // Reset form
-        contactForm.reset();
+            if (response.ok) {
+                // Show success state
+                submitBtn.textContent = 'Message Sent!';
+                submitBtn.style.background = '#22c55e';
+                contactForm.reset();
+            } else {
+                throw new Error('Form submission failed');
+            }
+        } catch (error) {
+            submitBtn.textContent = 'Error - Try Again';
+            submitBtn.style.background = '#ef4444';
+        }
 
         // Reset button after delay
         setTimeout(() => {
