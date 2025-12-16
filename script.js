@@ -66,7 +66,7 @@ animateElements.forEach((el, index) => {
 
 // ===== Contact Form - Saves to Google Sheet & Opens Email Client =====
 const sendEmailBtn = document.getElementById('sendEmailBtn');
-const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbx1ye--wKksif2NLtT65grkYmdNacdtptwHfzKw2-fnmpaUCBLO-WHg7yt-wr1IhKeq7A/exec';
+const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycby9z-ZNF_LDdjuUa9GK2ZYEgE-sDwq0tuQxJGBsyXsnU6ZVXG5gDfQQGwBsjCMLc0oklg/exec';
 
 if (sendEmailBtn) {
     sendEmailBtn.addEventListener('click', async (e) => {
