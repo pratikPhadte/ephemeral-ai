@@ -1051,6 +1051,34 @@ img {
     color: var(--gray-300);
 }
 
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 480px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-hint {
+    font-size: 0.8125rem;
+    color: var(--gray-400);
+    margin-bottom: 1.5rem;
+    margin-top: -0.5rem;
+}
+
+.form-hint.error {
+    color: #ef4444;
+}
+
+.form-group input.error,
+.form-group textarea.error {
+    border-color: #ef4444;
+}
+
 /* ===== Footer ===== */
 .footer {
     padding: 4rem 0 2rem;

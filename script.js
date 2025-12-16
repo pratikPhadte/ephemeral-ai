@@ -74,12 +74,33 @@ if (sendEmailBtn) {
 
         const name = document.getElementById('name').value.trim();
         const company = document.getElementById('company').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
         const message = document.getElementById('message').value.trim();
+        const contactHint = document.getElementById('contactHint');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+
+        // Reset error states
+        contactHint.classList.remove('error');
+        emailInput.classList.remove('error');
+        phoneInput.classList.remove('error');
+
+        // Validate: at least email or phone required
+        if (!email && !phone) {
+            contactHint.classList.add('error');
+            emailInput.classList.add('error');
+            phoneInput.classList.add('error');
+            contactHint.textContent = 'Please provide at least an email or phone number';
+            return;
+        }
 
         // Save to Google Sheet using URL parameters (works with CORS)
         const params = new URLSearchParams({
             name: name || 'Not provided',
             company: company || 'Not provided',
+            email: email || 'Not provided',
+            phone: phone || 'Not provided',
             message: message || 'No message'
         });
 
@@ -96,7 +117,9 @@ if (sendEmailBtn) {
         let body = '';
         if (name) body += `Name: ${name}\n`;
         if (company) body += `Company: ${company}\n`;
-        if (name || company) body += '\n';
+        if (email) body += `Email: ${email}\n`;
+        if (phone) body += `Phone: ${phone}\n`;
+        if (name || company || email || phone) body += '\n';
         body += message || 'I would like to discuss a project with you.';
 
         const encodedBody = encodeURIComponent(body);
