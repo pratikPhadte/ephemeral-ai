@@ -37,8 +37,29 @@ if (mobileMenuBtn) {
     });
 }
 
-// ===== Fade In Animation on Scroll =====
-const observerOptions = {
+// ===== Scroll Animation Observer =====
+const scrollObserverOptions = {
+    root: null,
+    rootMargin: '-50px',
+    threshold: 0.15
+};
+
+const scrollAnimationObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            scrollAnimationObserver.unobserve(entry.target);
+        }
+    });
+}, scrollObserverOptions);
+
+// Observe all animate-on-scroll elements
+document.querySelectorAll('.animate-on-scroll').forEach(el => {
+    scrollAnimationObserver.observe(el);
+});
+
+// ===== Legacy Fade In Animation (for backward compatibility) =====
+const fadeObserverOptions = {
     root: null,
     rootMargin: '0px',
     threshold: 0.1
@@ -51,16 +72,16 @@ const fadeInObserver = new IntersectionObserver((entries) => {
             fadeInObserver.unobserve(entry.target);
         }
     });
-}, observerOptions);
+}, fadeObserverOptions);
 
-// Add fade-in class to elements
+// Add fade-in class to legacy elements
 const animateElements = document.querySelectorAll(
-    '.service-card, .solution-item, .process-step, .tech-item'
+    '.service-card:not(.animate-on-scroll), .solution-item:not(.animate-on-scroll), .process-step:not(.animate-on-scroll), .tech-item'
 );
 
 animateElements.forEach((el, index) => {
     el.classList.add('fade-in');
-    el.style.transitionDelay = `${index * 0.1}s`;
+    el.style.transitionDelay = `${index * 0.08}s`;
     fadeInObserver.observe(el);
 });
 
@@ -161,40 +182,53 @@ if (mailtoBtn) {
 
 // ===== Parallax Effect for Artifacts =====
 const artifacts = document.querySelectorAll('.artifact');
+let rafId = null;
+let mouseX = 0.5;
+let mouseY = 0.5;
 
-window.addEventListener('mousemove', (e) => {
-    const mouseX = e.clientX / window.innerWidth;
-    const mouseY = e.clientY / window.innerHeight;
-
+const updateArtifacts = () => {
     artifacts.forEach((artifact, index) => {
-        const speed = (index + 1) * 0.02;
-        const x = (mouseX - 0.5) * speed * 100;
-        const y = (mouseY - 0.5) * speed * 100;
-
+        const speed = (index + 1) * 0.015;
+        const x = (mouseX - 0.5) * speed * 80;
+        const y = (mouseY - 0.5) * speed * 80;
         artifact.style.transform = `translate(${x}px, ${y}px)`;
     });
+    rafId = null;
+};
+
+window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX / window.innerWidth;
+    mouseY = e.clientY / window.innerHeight;
+
+    if (!rafId) {
+        rafId = requestAnimationFrame(updateArtifacts);
+    }
 });
 
-// ===== Typing Effect for Hero (Optional Enhancement) =====
-const heroTitle = document.querySelector('.hero h1');
-const originalText = heroTitle?.textContent || '';
-
 // ===== Counter Animation for Stats =====
-const animateCounter = (element, target, duration = 2000) => {
+const animateCounter = (element, target, suffix = '', duration = 2000) => {
     let start = 0;
     const increment = target / (duration / 16);
+    const startTime = performance.now();
 
-    const updateCounter = () => {
-        start += increment;
-        if (start < target) {
-            element.textContent = Math.floor(start);
+    const updateCounter = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Easing function (ease-out cubic)
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(target * easedProgress);
+
+        element.textContent = current + suffix;
+
+        if (progress < 1) {
             requestAnimationFrame(updateCounter);
         } else {
-            element.textContent = target;
+            element.textContent = target + suffix;
         }
     };
 
-    updateCounter();
+    requestAnimationFrame(updateCounter);
 };
 
 // Observe stats section
@@ -209,8 +243,7 @@ if (statsSection) {
                     if (text.includes('+')) {
                         const num = parseInt(text);
                         stat.textContent = '0+';
-                        animateCounter(stat, num, 1500);
-                        setTimeout(() => stat.textContent = num + '+', 1600);
+                        animateCounter(stat, num, '+', 1800);
                     }
                 });
                 statsObserver.unobserve(entry.target);
@@ -225,14 +258,15 @@ if (statsSection) {
 const sections = document.querySelectorAll('section[id]');
 const navItems = document.querySelectorAll('.nav-links a');
 
-window.addEventListener('scroll', () => {
+const highlightNav = () => {
     let current = '';
+    const scrollPos = window.scrollY + 120;
 
     sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
+        const sectionTop = section.offsetTop;
         const sectionHeight = section.offsetHeight;
 
-        if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+        if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
             current = section.getAttribute('id');
         }
     });
@@ -243,11 +277,20 @@ window.addEventListener('scroll', () => {
             item.classList.add('active');
         }
     });
-});
+};
 
-// ===== Preloader (Optional) =====
+window.addEventListener('scroll', highlightNav);
+
+// ===== Preloader =====
 window.addEventListener('load', () => {
     document.body.classList.add('loaded');
+
+    // Trigger initial animations after load
+    setTimeout(() => {
+        document.querySelectorAll('.hero .animate-on-scroll').forEach(el => {
+            el.classList.add('visible');
+        });
+    }, 100);
 });
 
 // ===== Service Card Hover Effect =====
@@ -273,3 +316,19 @@ document.addEventListener('keydown', (e) => {
         }
     }
 });
+
+// ===== Smooth reveal for hero elements =====
+const heroContent = document.querySelector('.hero-content');
+const heroVisual = document.querySelector('.hero-visual');
+
+if (heroContent && heroVisual) {
+    setTimeout(() => {
+        heroContent.style.opacity = '1';
+        heroContent.style.transform = 'translateY(0)';
+    }, 200);
+
+    setTimeout(() => {
+        heroVisual.style.opacity = '1';
+        heroVisual.style.transform = 'translateY(0)';
+    }, 400);
+}
